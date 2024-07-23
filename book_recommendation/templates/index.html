@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Recommendation System</title>
+
+  <style>
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background: linear-gradient(to right, #074173, #11468F, #11468F, #074173);  
+      margin: 0;
+      padding: 0;
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.486); /* Transparent background */
+      backdrop-filter: blur(10px); /* Glassmorphic effect */
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: calc(100% - 24px); /* Adjusted for padding */
+      padding: 12px;
+      border: 1px solid #bab2b2;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 16px;
+      transition: border-color 0.3s ease-in-out;
+      color: #555;
+      background-color: #f5f5f5;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+    }
+
+    .form-group button {
+      width: 100%;
+      padding: 14px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease-in-out;
+      text-transform: uppercase;
+    }
+
+    .form-group button:hover {
+      background-color: #0056b3;
+    }
+
+    .genre-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .genre-section select {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #bab2b2;
+      transition: border-color 0.3s ease-in-out;
+      color: #555;
+      background-color: #f5f5f5;
+    }
+
+    .genre-section select:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+    }
+
+    .recommendations {
+      margin-top: 20px;
+    }
+
+    .book-card {
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .book-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-getRecommendations {
+      background: #5E5DF0;
+      border-radius: 999px;
+      box-shadow: #5E5DF0 0 10px 20px -10px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+      opacity: 1;
+      outline: 0 solid transparent;
+      padding: 8px 18px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: fit-content;
+      word-break: break-word;
+      border: 0;
+    }
+
+    .account-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px; /* Added margin to separate from other content */
+    }
+
+    .account-info p {
+      margin: 0;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .logout-button {
+      background: #FF4742;
+      border: 1px solid #FF4742;
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: inline-block;
+      font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 12px;
+      min-height: 40px;
+      outline: 0;
+      padding: 12px 14px;
+      text-align: center;
+      text-rendering: geometricprecision;
+      text-transform: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      vertical-align: middle;
+    }
+
+    .logout-button:hover,
+    .logout-button:active {
+      background-color: initial;
+      background-position: 0 0;
+      color: #FF4742;
+    }
+
+    .button-24:active {
+      opacity: .5;
+    }
+    
+    /*User Rating*/
+    .rating-form {
+      margin-top: 10px;
+    }
+    .rating-form input[type="number"] {
+      width: 60px;
+      margin-right: 10px;
+    }
+
+    /*Book Viewer*/
+
+    .book-list {
+      margin-top: 30px;
+    }
+    .book-card {
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+    .book-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /*Book Viewer Overlay*/
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(255, 255, 255);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.174); /* Transparent background */
+      backdrop-filter: blur(10px); /* Glassmorphic effect */
+    }
+
+    .overlay-content {
+      background-color:rgb(149, 148, 154);;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-height: 80%;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .close-btn {
+      position: fixed; /* Change from absolute to fixed */
+      top: 50px; /* Adjust positioning */
+      right: 90px; /* Adjust positioning */
+      background: #FF4742;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      z-index: 1001; /* Ensure the button is above the overlay */
+    }
+
+    .close-btn:hover {
+      background: #d43f3a;
+    }
+
+    .button-browse {
+      background: #5E5DF0;
+      border-radius: 999px;
+      box-shadow: #5E5DF0 0 10px 20px -10px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+      opacity: 1;
+      outline: 0 solid transparent;
+      padding: 8px 18px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: fit-content;
+      word-break: break-word;
+      border: 0;
+    }
+
+  </style>
+</head>
+<body style="background-image: url('http://localhost/book_recommendation/templates/Background_image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+  <div class="container">
+    <h1>Book Recommendation System 📚</h1>
+
+    <div class="account-info">
+      <p class="button-browse" style="font-family: 'Untitled Sans'; font-size: 19px; font-weight: 400; letter-spacing: -0.20px; color: white;">{{ user_email }}</p>
+      <a href="/logout" class="button-getRecommendations">Logout</a>
+    </div>
+
+    <div class="genre-section">
+      <h2>Select Genre and Sub-Genre</h2>
+      <select id="genre-select" onchange="updateSubGenres()" style="background: #fff; border-radius: 999px; box-shadow: #773af0 0 10px 20px -10px; box-sizing: border-box;
+      color: #757575;">
+        <option style="background: #ffffff; color: #757575;" value="">Select Genre</option>
+        <option style="background: #FFFFFF; color: #757575;" value="Fiction">Fiction</option>
+        <option style="background: #ffffff; color: #757575;" value="Nonfiction">Nonfiction</option>
+        <option style="background: #fff; color: #757575;" value="Tech">Tech</option>
+        <option style="background: #fff; color: #757575;" value="Science">Science</option>
+        <option style="background: #fff; color: #757575;" value="Philosophy">Philosophy</option>
+      </select>
+      <select id="subgenre-select" style="background: #fff; border-radius: 999px;
+      box-shadow: #773af0 0 10px 20px -10px;
+      box-sizing: border-box;
+      color: #757575;">
+        <option style="background: #fff; color: #757575;" value="">Select Sub-Genre</option>
+      </select>
+
+      <div class="form-group">
+        <label for="num-recommendations">Number of Recommendations:</label>
+        <input type="number" id="num-recommendations" min="1" value="3">
+      </div>
+      
+      <button class="button-getRecommendations" onclick="getRecommendations()" role="button">Get Recommendations</button>
+      <button id="view-all-books-button" class="button-getRecommendations" role="button">View All Books</button>
+      <button class="button-browse" type="button" onclick="window.open('http://localhost/book_recommendation/templates/Explore.php?sort=UserRating&order=DESC', '_blank')">Browse</button>
+      <button class="button-browse" type="button" onclick="window.open('http://localhost/book_recommendation/templates/Home.php')">Home</button>
+
+
+    </div>
+
+    <div class="recommendations" id="recommendations"></div>
+  </div>
+
+  <!-- Overlay for Book List -->
+    <div id="overlay" class="overlay">
+      <div class="overlay-content">
+        <button class="close-btn" onclick="hideOverlay()">✖ Close</button>
+        <h2>All Books 📚</h2>
+        <select id="sort-select" onchange="getAllBooksForOverlay()" style="background: #fff; border-radius: 999px; box-shadow: #773af0 0 10px 20px -10px; box-sizing: border-box; color: #757575;">
+          <option style="background: #fff; color: #757575;" value="asc">Sort by Rating (Ascending)</option>
+          <option style="background: #fff; color: #757575;" value="desc">Sort by Rating (Descending)</option>
+        </select>
+        <div id="overlay-book-list" class="book-list"></div>
+      </div>
+    </div>
+
+
+  
+
+  <script>
+    const subGenres = {
+      Fiction: ['History', 'Classic', 'Novel'],
+      Nonfiction: ['Economics', 'Autobiography', 'Education'],
+      Tech: ['Data Science', 'Signal Processing', 'Computer Science'],
+      Science: ['Mathematics', 'Physics', 'Science'],
+      Philosophy: ['Misc', 'Psychology', 'Philosophy', 'Poetry', 'Trivia', 'Objectivism', 'Anthology']
+    };
+
+    function updateSubGenres() {
+      const genre = document.getElementById('genre-select').value;
+      const subgenreSelect = document.getElementById('subgenre-select');
+      subgenreSelect.innerHTML = '<option value="">Select Sub-Genre</option>';
+      
+      if (genre && subGenres[genre]) {
+        subGenres[genre].forEach(subgenre => {
+          const option = document.createElement('option');
+          option.value = subgenre;
+          option.textContent = subgenre;
+          subgenreSelect.appendChild(option);
+        });
+      }
+    }
+
+    function getRecommendations() {
+      const genre = document.getElementById('genre-select').value;
+      const subgenre = document.getElementById('subgenre-select').value;
+      const numRecommendations = document.getElementById('num-recommendations').value || 3;  // Default to 3 if not provided
+      const recommendations = document.getElementById('recommendations');
+      recommendations.innerHTML = `<h3>Recommended Books for ${subgenre ? subgenre + ' in ' : ''}${genre} 📚</h3>`;
+
+      fetch('/recommend', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ genre: genre, subgenre: subgenre, num_recommendations: numRecommendations })
+      })
+      .then(response => response.json())
+      .then(books => {
+          if (books.length === 0) {
+              recommendations.innerHTML = `<h3>No books found for ${subgenre ? subgenre + ' in ' : ''}${genre} 📚</h3>`;
+          } else {
+              books.forEach(book => {
+                  const bookCard = document.createElement('div');
+                  bookCard.className = 'book-card';
+                  bookCard.innerHTML = `
+                      <h4>Title :  ${book.Title}</h4>
+                      <p>Author : ${book.Author}</p>
+                      <p>Genre  : ${book.Genre}</p>
+                      <div class="rating-form">
+                        <label for="rating-${book.Title}">Rate this book:</label>
+                        <input type="number" id="rating-${book.Title}" min="1" max="5">
+                        <button class="button-browse" onclick="submitRating('${book.Title}')">Submit Rating</button>
+                      </div>
+                  `;
+                  recommendations.appendChild(bookCard);
+              });
+          }
+      })
+      .catch(error => {
+          console.error('Error fetching recommendations:', error);
+      });
+    }
+
+    /*Book Viewer Overlay*/
+    function showOverlay() {
+      document.getElementById('overlay').style.display = 'flex';
+      getAllBooksForOverlay();  // Fetch books for the overlay
+    }
+
+    // Function to hide the overlay
+    function hideOverlay() {
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    /*Book Viewer*/
+    function getAllBooksForOverlay() {
+    const sortBy = document.getElementById('sort-select').value;
+    const bookList = document.getElementById('overlay-book-list');
+    bookList.innerHTML = '<h3>All Books 📚</h3>';
+
+    fetch(`/all_books?sort_by=${sortBy}`)
+      .then(response => response.json())
+      .then(books => {
+        if (books.length === 0) {
+          bookList.innerHTML += `<p>No books available.</p>`;
+        } else {
+          books.forEach(book => {
+            const bookCard = document.createElement('div');
+            bookCard.className = 'book-card';
+            bookCard.innerHTML = `
+              <h4>Title :  ${book.Title}</h4>
+              <p>Author : ${book.Author}</p>
+              <p>Genre  : ${book.Genre}</p>
+              <p>Rating : ${book.UserRating || 'Not rated'}</p>
+            `;
+            bookList.appendChild(bookCard);
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching books:', error);
+      });
+    }
+
+    // Add event listener for the button to show overlay
+    document.getElementById('view-all-books-button').addEventListener('click', showOverlay);
+
+    /*User Rating*/
+    function submitRating(title) {
+      const rating = document.getElementById(`rating-${title}`).value;
+      
+      if (!rating || rating < 1 || rating > 5) {
+        alert('Please enter a valid rating between 1 and 5.');
+        return;
+      }
+
+      fetch('/rate_book', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ title: title, rating: rating })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert(data.message);
+          }
+      })
+      .catch(error => {
+          console.error('Error submitting rating:', error);
+      });
+    }
+
+  </script>
+</body>
+</html>
